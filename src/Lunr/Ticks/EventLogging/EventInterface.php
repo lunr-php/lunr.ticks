@@ -36,11 +36,11 @@ interface EventInterface
     /**
      * Set trace ID the event belongs to.
      *
-     * @param string $trace_id Trace ID
+     * @param string $traceID Trace ID
      *
      * @return void
      */
-    public function set_trace_id(string $trace_id): void;
+    public function set_trace_id(string $traceID): void;
 
     /**
      * Get trace ID the event belongs to.
@@ -52,11 +52,11 @@ interface EventInterface
     /**
      * Set span ID the event belongs to.
      *
-     * @param string $span_id Span ID
+     * @param string $spanID Span ID
      *
      * @return void
      */
-    public function set_span_id(string $span_id): void;
+    public function set_span_id(string $spanID): void;
 
     /**
      * Get span ID the event belongs to.
