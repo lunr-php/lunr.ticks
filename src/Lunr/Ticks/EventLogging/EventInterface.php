@@ -66,6 +66,32 @@ interface EventInterface
     public function get_span_id(): ?string;
 
     /**
+     * Set span ID of the parent the event belongs to.
+     *
+     * @param string $spanID Span ID
+     *
+     * @return void
+     */
+    public function set_parent_span_id(string $spanID): void;
+
+    /**
+     * Get span ID of the parent the event belongs to.
+     *
+     * @return string|null Parent span ID
+     */
+    public function get_parent_span_id(): ?string;
+
+    /**
+     * Set a UUID value.
+     *
+     * @param string $key  Name for the UUID value
+     * @param string $uuid The UUID to set
+     *
+     * @return void
+     */
+    public function set_uuid_value(string $key, string $uuid): void;
+
+    /**
      * Set indexed metadata.
      *
      * This clears all previously set values and replaces them.
