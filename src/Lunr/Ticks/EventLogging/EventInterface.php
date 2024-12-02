@@ -156,7 +156,7 @@ interface EventInterface
      *
      * @return void
      */
-    public function record_timestamp(Precision $precision): void;
+    public function record_timestamp(Precision $precision = Precision::NanoSeconds): void;
 
     /**
      * Set custom timestamp for the event.
