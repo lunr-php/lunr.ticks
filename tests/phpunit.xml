@@ -17,6 +17,9 @@
         <testsuite name="Profling">
             <directory>../src/Lunr/Ticks/Profiling/Tests/</directory>
         </testsuite>
+        <testsuite name="NullEventLogging">
+            <directory>../src/Lunr/Ticks/EventLogging/Null/Tests/</directory>
+        </testsuite>
     </testsuites>
     <coverage>
         <include>
@@ -25,6 +28,7 @@
         <exclude>
             <directory>../src/Lunr/Ticks/Tests/</directory>
             <directory>../src/Lunr/Ticks/EventLogging/Tests/</directory>
+            <directory>../src/Lunr/Ticks/EventLogging/Null/Tests/</directory>
             <directory>../src/Lunr/Ticks/Profiling/Tests/</directory>
         </exclude>
         <report>
