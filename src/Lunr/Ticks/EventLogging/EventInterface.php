@@ -13,6 +13,9 @@ use Lunr\Ticks\Precision;
 
 /**
  * Interface for events.
+ *
+ * @phpstan-type Tags   array<string,string|null>
+ * @phpstan-type Fields array<string,scalar|null>
  */
 interface EventInterface
 {
@@ -96,7 +99,7 @@ interface EventInterface
      *
      * This clears all previously set values and replaces them.
      *
-     * @param array<string,string|null> $tags Indexed metadata
+     * @param Tags $tags Indexed metadata
      *
      * @return void
      */
@@ -107,7 +110,7 @@ interface EventInterface
      *
      * Set new values on top of previously set values.
      *
-     * @param array<string,string|null> $tags Indexed metadata
+     * @param Tags $tags Indexed metadata
      *
      * @return void
      */
@@ -116,7 +119,7 @@ interface EventInterface
     /**
      * Get indexed metadata.
      *
-     * @return array<string,string|null> Indexed metadata
+     * @return Tags Indexed metadata
      */
     public function get_tags(): array;
 
@@ -125,7 +128,7 @@ interface EventInterface
      *
      * This clears all previously set values and replaces them.
      *
-     * @param array<string,bool|float|int|string|null> $fields Unstructured metadata
+     * @param Fields $fields Unstructured metadata
      *
      * @return void
      */
@@ -136,7 +139,7 @@ interface EventInterface
      *
      * Set new values on top of previously set values.
      *
-     * @param array<string,bool|float|int|string|null> $fields Unstructured metadata
+     * @param Fields $fields Unstructured metadata
      *
      * @return void
      */
@@ -145,7 +148,7 @@ interface EventInterface
     /**
      * Get unstructured metadata.
      *
-     * @return array<string,bool|float|int|string|null> Unstructured metadata
+     * @return Fields Unstructured metadata
      */
     public function get_fields(): array;
 
