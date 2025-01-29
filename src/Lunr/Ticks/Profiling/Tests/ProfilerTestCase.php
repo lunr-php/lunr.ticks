@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file contains the ProfilerTest class.
+ * This file contains the ProfilerTestCase class.
  *
  * SPDX-FileCopyrightText: Copyright 2024 Move Agency Group B.V., Zwolle, The Netherlands
  * SPDX-License-Identifier: MIT
@@ -9,7 +9,7 @@
 
 namespace Lunr\Ticks\Profiling\Tests;
 
-use Lunr\Halo\LunrBaseTest;
+use Lunr\Halo\LunrBaseTestCase;
 use Lunr\Ticks\EventLogging\EventInterface;
 use Lunr\Ticks\Profiling\Profiler;
 
@@ -19,7 +19,7 @@ use Lunr\Ticks\Profiling\Profiler;
  *
  * @covers Lunr\Ticks\Profiling\Profiler
  */
-abstract class ProfilerTest extends LunrBaseTest
+abstract class ProfilerTestCase extends LunrBaseTestCase
 {
 
     /**
@@ -53,13 +53,13 @@ abstract class ProfilerTest extends LunrBaseTest
         $floatval  = 1734352683.3516;
         $stringval = '0.35160200 1734352683';
 
-        $this->mock_function('microtime', fn(bool $float) => $float ? $floatval : $stringval);
+        $this->mockFunction('microtime', fn(bool $float) => $float ? $floatval : $stringval);
 
         $this->class = new Profiler($this->event);
 
         // Unmock here instead of tearDown() because we have another microtime call in the record()
         // method that needs a different mock.
-        $this->unmock_function('microtime');
+        $this->unmockFunction('microtime');
 
         parent::baseSetUp($this->class);
     }

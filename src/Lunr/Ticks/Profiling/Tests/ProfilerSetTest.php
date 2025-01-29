@@ -14,7 +14,7 @@ namespace Lunr\Ticks\Profiling\Tests;
  *
  * @covers Lunr\Ticks\Profiling\Profiler
  */
-class ProfilerSetTest extends ProfilerTest
+class ProfilerSetTest extends ProfilerTestCase
 {
 
     /**

@@ -14,7 +14,7 @@ namespace Lunr\Ticks\Profiling\Tests;
  *
  * @covers Lunr\Ticks\Profiling\Profiler
  */
-class ProfilerRecordTest extends ProfilerTest
+class ProfilerRecordTest extends ProfilerTestCase
 {
 
     /**
@@ -27,9 +27,9 @@ class ProfilerRecordTest extends ProfilerTest
         $floatval  = 1734352684.6526;
         $stringval = '0.65260200 1734352684';
 
-        $this->mock_function('microtime', fn(bool $float) => $float ? $floatval : $stringval);
-        $this->mock_function('memory_get_usage', fn() => 526160);
-        $this->mock_function('memory_get_peak_usage', fn() => 561488);
+        $this->mockFunction('microtime', fn(bool $float) => $float ? $floatval : $stringval);
+        $this->mockFunction('memory_get_usage', fn() => 526160);
+        $this->mockFunction('memory_get_peak_usage', fn() => 561488);
 
         $fields = [
             'startTimestamp' => 1734352683.3516,
@@ -53,13 +53,13 @@ class ProfilerRecordTest extends ProfilerTest
         $this->event->expects($this->once())
                     ->method('record');
 
-        $method = $this->get_reflection_method('record');
+        $method = $this->getReflectionMethod('record');
 
         $method->invoke($this->class);
 
-        $this->unmock_function('memory_get_usage');
-        $this->unmock_function('memory_get_peak_usage');
-        $this->unmock_function('microtime');
+        $this->unmockFunction('memory_get_usage');
+        $this->unmockFunction('memory_get_peak_usage');
+        $this->unmockFunction('microtime');
     }
 
     /**
@@ -72,9 +72,9 @@ class ProfilerRecordTest extends ProfilerTest
         $floatval  = 1734352684.6526;
         $stringval = '0.65260200 1734352684';
 
-        $this->mock_function('microtime', fn(bool $float) => $float ? $floatval : $stringval);
-        $this->mock_function('memory_get_usage', fn() => 526160);
-        $this->mock_function('memory_get_peak_usage', fn() => 561488);
+        $this->mockFunction('microtime', fn(bool $float) => $float ? $floatval : $stringval);
+        $this->mockFunction('memory_get_usage', fn() => 526160);
+        $this->mockFunction('memory_get_peak_usage', fn() => 561488);
 
         $spanID = '8d1a5341-16f9-4608-bf51-db198e52575c';
 
@@ -87,9 +87,9 @@ class ProfilerRecordTest extends ProfilerTest
             'runTime'        => 0,
         ];
 
-        $this->set_reflection_property_value('spans', [ $base ]);
-        $this->set_reflection_property_value('fields', [ 'baz' => 2.0 ]);
-        $this->set_reflection_property_value('tags', [ 'foo' => 'bar' ]);
+        $this->setReflectionPropertyValue('spans', [ $base ]);
+        $this->setReflectionPropertyValue('fields', [ 'baz' => 2.0 ]);
+        $this->setReflectionPropertyValue('tags', [ 'foo' => 'bar' ]);
 
         $fields = [
             'baz'                       => 2.0,
@@ -126,13 +126,13 @@ class ProfilerRecordTest extends ProfilerTest
                     ->method('set_uuid_value')
                     ->with('spanIdUnitTestRun', $spanID);
 
-        $method = $this->get_reflection_method('record');
+        $method = $this->getReflectionMethod('record');
 
         $method->invoke($this->class);
 
-        $this->unmock_function('memory_get_usage');
-        $this->unmock_function('memory_get_peak_usage');
-        $this->unmock_function('microtime');
+        $this->unmockFunction('memory_get_usage');
+        $this->unmockFunction('memory_get_peak_usage');
+        $this->unmockFunction('microtime');
     }
 
     /**
@@ -145,9 +145,9 @@ class ProfilerRecordTest extends ProfilerTest
         $floatval  = 1734352684.6526;
         $stringval = '0.65260200 1734352684';
 
-        $this->mock_function('microtime', fn(bool $float) => $float ? $floatval : $stringval);
-        $this->mock_function('memory_get_usage', fn() => 526160);
-        $this->mock_function('memory_get_peak_usage', fn() => 561488);
+        $this->mockFunction('microtime', fn(bool $float) => $float ? $floatval : $stringval);
+        $this->mockFunction('memory_get_usage', fn() => 526160);
+        $this->mockFunction('memory_get_peak_usage', fn() => 561488);
 
         $spanID  = '8d1a5341-16f9-4608-bf51-db198e52575c';
         $spanID2 = '9da74534-21d6-4a75-b58e-d27273a35330';
@@ -171,9 +171,9 @@ class ProfilerRecordTest extends ProfilerTest
             ]
         ];
 
-        $this->set_reflection_property_value('spans', $base);
-        $this->set_reflection_property_value('fields', [ 'baz' => 2.0 ]);
-        $this->set_reflection_property_value('tags', [ 'foo' => 'bar' ]);
+        $this->setReflectionPropertyValue('spans', $base);
+        $this->setReflectionPropertyValue('fields', [ 'baz' => 2.0 ]);
+        $this->setReflectionPropertyValue('tags', [ 'foo' => 'bar' ]);
 
         $fields = [
             'baz'                              => 2.0,
@@ -217,13 +217,13 @@ class ProfilerRecordTest extends ProfilerTest
                         [ 'spanIdAnotherUnitTestRun', $spanID2 ]
                     );
 
-        $method = $this->get_reflection_method('record');
+        $method = $this->getReflectionMethod('record');
 
         $method->invoke($this->class);
 
-        $this->unmock_function('memory_get_usage');
-        $this->unmock_function('memory_get_peak_usage');
-        $this->unmock_function('microtime');
+        $this->unmockFunction('memory_get_usage');
+        $this->unmockFunction('memory_get_peak_usage');
+        $this->unmockFunction('microtime');
     }
 
 }
