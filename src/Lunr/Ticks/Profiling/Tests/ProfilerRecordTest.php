@@ -40,15 +40,15 @@ class ProfilerRecordTest extends ProfilerTestCase
         ];
 
         $this->event->expects($this->once())
-                    ->method('add_fields')
+                    ->method('addFields')
                     ->with($fields);
 
         $this->event->expects($this->once())
-                    ->method('add_tags')
+                    ->method('addTags')
                     ->with([]);
 
         $this->event->expects($this->once())
-                    ->method('record_timestamp');
+                    ->method('recordTimestamp');
 
         $this->event->expects($this->once())
                     ->method('record');
@@ -105,7 +105,7 @@ class ProfilerRecordTest extends ProfilerTestCase
         ];
 
         $this->event->expects($this->once())
-                    ->method('add_fields')
+                    ->method('addFields')
                     ->with($fields);
 
         $tags = [
@@ -113,17 +113,17 @@ class ProfilerRecordTest extends ProfilerTestCase
         ];
 
         $this->event->expects($this->once())
-                    ->method('add_tags')
+                    ->method('addTags')
                     ->with($tags);
 
         $this->event->expects($this->once())
-                    ->method('record_timestamp');
+                    ->method('recordTimestamp');
 
         $this->event->expects($this->once())
                     ->method('record');
 
         $this->event->expects($this->once())
-                    ->method('set_uuid_value')
+                    ->method('setUuidValue')
                     ->with('spanIdUnitTestRun', $spanID);
 
         $method = $this->getReflectionMethod('record');
@@ -193,7 +193,7 @@ class ProfilerRecordTest extends ProfilerTestCase
         ];
 
         $this->event->expects($this->once())
-                    ->method('add_fields')
+                    ->method('addFields')
                     ->with($fields);
 
         $tags = [
@@ -201,17 +201,17 @@ class ProfilerRecordTest extends ProfilerTestCase
         ];
 
         $this->event->expects($this->once())
-                    ->method('add_tags')
+                    ->method('addTags')
                     ->with($tags);
 
         $this->event->expects($this->once())
-                    ->method('record_timestamp');
+                    ->method('recordTimestamp');
 
         $this->event->expects($this->once())
                     ->method('record');
 
         $this->event->expects($this->exactly(2))
-                    ->method('set_uuid_value')
+                    ->method('setUuidValue')
                     ->withConsecutive(
                         [ 'spanIdUnitTestRun', $spanID ],
                         [ 'spanIdAnotherUnitTestRun', $spanID2 ]

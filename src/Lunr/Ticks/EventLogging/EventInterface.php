@@ -27,14 +27,14 @@ interface EventInterface
      *
      * @return void
      */
-    public function set_name(string $name): void;
+    public function setName(string $name): void;
 
     /**
      * Get event name.
      *
      * @return string Event name
      */
-    public function get_name(): string;
+    public function getName(): string;
 
     /**
      * Set trace ID the event belongs to.
@@ -43,14 +43,14 @@ interface EventInterface
      *
      * @return void
      */
-    public function set_trace_id(string $traceID): void;
+    public function setTraceId(string $traceID): void;
 
     /**
      * Get trace ID the event belongs to.
      *
      * @return string|null Trace ID
      */
-    public function get_trace_id(): ?string;
+    public function getTraceId(): ?string;
 
     /**
      * Set span ID the event belongs to.
@@ -59,14 +59,14 @@ interface EventInterface
      *
      * @return void
      */
-    public function set_span_id(string $spanID): void;
+    public function setSpanId(string $spanID): void;
 
     /**
      * Get span ID the event belongs to.
      *
      * @return string|null Span ID
      */
-    public function get_span_id(): ?string;
+    public function getSpanId(): ?string;
 
     /**
      * Set span ID of the parent the event belongs to.
@@ -75,14 +75,14 @@ interface EventInterface
      *
      * @return void
      */
-    public function set_parent_span_id(string $spanID): void;
+    public function setParentSpanId(string $spanID): void;
 
     /**
      * Get span ID of the parent the event belongs to.
      *
      * @return string|null Parent span ID
      */
-    public function get_parent_span_id(): ?string;
+    public function getParentSpanId(): ?string;
 
     /**
      * Set a UUID value.
@@ -92,7 +92,7 @@ interface EventInterface
      *
      * @return void
      */
-    public function set_uuid_value(string $key, string $uuid): void;
+    public function setUuidValue(string $key, string $uuid): void;
 
     /**
      * Set indexed metadata.
@@ -103,7 +103,7 @@ interface EventInterface
      *
      * @return void
      */
-    public function set_tags(array $tags): void;
+    public function setTags(array $tags): void;
 
     /**
      * Add indexed metadata.
@@ -114,14 +114,14 @@ interface EventInterface
      *
      * @return void
      */
-    public function add_tags(array $tags): void;
+    public function addTags(array $tags): void;
 
     /**
      * Get indexed metadata.
      *
      * @return Tags Indexed metadata
      */
-    public function get_tags(): array;
+    public function getTags(): array;
 
     /**
      * Set unstructured metadata.
@@ -132,7 +132,7 @@ interface EventInterface
      *
      * @return void
      */
-    public function set_fields(array $fields): void;
+    public function setFields(array $fields): void;
 
     /**
      * Add unstructured metadata.
@@ -143,14 +143,14 @@ interface EventInterface
      *
      * @return void
      */
-    public function add_fields(array $fields): void;
+    public function addFields(array $fields): void;
 
     /**
      * Get unstructured metadata.
      *
      * @return Fields Unstructured metadata
      */
-    public function get_fields(): array;
+    public function getFields(): array;
 
     /**
      * Record the current timestamp for the event.
@@ -159,7 +159,7 @@ interface EventInterface
      *
      * @return void
      */
-    public function record_timestamp(Precision $precision = Precision::NanoSeconds): void;
+    public function recordTimestamp(Precision $precision = Precision::NanoSeconds): void;
 
     /**
      * Set custom timestamp for the event.
@@ -168,14 +168,14 @@ interface EventInterface
      *
      * @return void
      */
-    public function set_timestamp(int|string $timestamp): void;
+    public function setTimestamp(int|string $timestamp): void;
 
     /**
      * Return the timestamp for the event.
      *
      * @return int|string Timestamp
      */
-    public function get_timestamp(): int|string;
+    public function getTimestamp(): int|string;
 
     /**
      * Record the event.

@@ -81,9 +81,9 @@ class Profiler
      *
      * @return void
      */
-    public function set_trace_id(string $trace_id): void
+    public function setTraceId(string $trace_id): void
     {
-        $this->event->set_trace_id($trace_id);
+        $this->event->setTraceId($trace_id);
     }
 
     /**
@@ -93,10 +93,10 @@ class Profiler
      *
      * @return void
      */
-    public function set_span_id(string $span_id): void
+    public function setSpanId(string $span_id): void
     {
         // InfluxDB 1.x doesn't do well with UUID tag values, so we store this as a field
-        $this->event->add_fields([ 'spanID' => $span_id ]);
+        $this->event->addFields([ 'spanID' => $span_id ]);
     }
 
     /**
@@ -107,9 +107,9 @@ class Profiler
      *
      * @return void
      */
-    public function add_field(string $key, bool|float|int|string|null $value): void
+    public function addField(string $key, bool|float|int|string|null $value): void
     {
-        $this->event->add_fields([ $key => $value ]);
+        $this->event->addFields([ $key => $value ]);
     }
 
     /**
@@ -121,9 +121,9 @@ class Profiler
      *
      * @return void
      */
-    public function add_fields(array $fields): void
+    public function addFields(array $fields): void
     {
-        $this->event->add_fields($fields);
+        $this->event->addFields($fields);
     }
 
     /**
@@ -134,9 +134,9 @@ class Profiler
      *
      * @return void
      */
-    public function add_tag(string $key, ?string $value): void
+    public function addTag(string $key, ?string $value): void
     {
-        $this->event->add_tags([ $key => $value ]);
+        $this->event->addTags([ $key => $value ]);
     }
 
     /**
@@ -148,9 +148,9 @@ class Profiler
      *
      * @return void
      */
-    public function add_tags(array $tags): void
+    public function addTags(array $tags): void
     {
-        $this->event->add_tags($tags);
+        $this->event->addTags($tags);
     }
 
     /**
@@ -161,11 +161,11 @@ class Profiler
      *
      * @return void
      */
-    public function start_new_span(string $name, string $spanID): void
+    public function startNewSpan(string $name, string $spanID): void
     {
         $start = microtime(TRUE);
 
-        $this->finalize_previous_span($start);
+        $this->finalizePreviousSpan($start);
 
         $span = [
             'name'           => str_replace(' ', '', ucwords($name)),
@@ -186,7 +186,7 @@ class Profiler
      *
      * @return void
      */
-    protected function finalize_previous_span(float $time): void
+    protected function finalizePreviousSpan(float $time): void
     {
         $last_report = count($this->spans) - 1;
 
@@ -210,7 +210,7 @@ class Profiler
     {
         $time = microtime(TRUE);
 
-        $this->finalize_previous_span($time);
+        $this->finalizePreviousSpan($time);
 
         $fields = $this->fields + [
             'startTimestamp' => $this->startTimestamp,
@@ -224,7 +224,7 @@ class Profiler
         {
             $name = $span['name'];
 
-            $this->event->set_uuid_value('spanId' . $name, $span['spanId']);
+            $this->event->setUuidValue('spanId' . $name, $span['spanId']);
 
             unset($span['spanId'], $span['name']);
 
@@ -234,9 +234,9 @@ class Profiler
             }
         }
 
-        $this->event->add_fields($fields);
-        $this->event->add_tags($this->tags);
-        $this->event->record_timestamp();
+        $this->event->addFields($fields);
+        $this->event->addTags($this->tags);
+        $this->event->recordTimestamp();
 
         $this->event->record();
     }

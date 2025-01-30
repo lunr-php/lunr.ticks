@@ -22,7 +22,7 @@ interface EventLoggerInterface
      *
      * @return EventInterface Instance of a new Event
      */
-    public function new_event(string $name): EventInterface;
+    public function newEvent(string $name): EventInterface;
 
 }
 

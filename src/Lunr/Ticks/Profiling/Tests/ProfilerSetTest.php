@@ -18,91 +18,91 @@ class ProfilerSetTest extends ProfilerTestCase
 {
 
     /**
-     * Test that set_trace_id() sets a trace ID on the event.
+     * Test that setTraceId() sets a trace ID on the event.
      *
-     * @covers Lunr\Ticks\Profiling\Profiler::set_trace_id
+     * @covers Lunr\Ticks\Profiling\Profiler::setTraceId
      */
     public function testSetTraceId(): void
     {
         $traceID = 'e0af2cd4-6a1c-4bd6-8fca-d3684e699784';
 
         $this->event->expects($this->once())
-                    ->method('set_trace_id')
+                    ->method('setTraceId')
                     ->with($traceID);
 
-        $this->class->set_trace_id($traceID);
+        $this->class->setTraceId($traceID);
     }
 
     /**
-     * Test that set_span_id() sets a span ID on the event.
+     * Test that setSpanId() sets a span ID on the event.
      *
-     * @covers Lunr\Ticks\Profiling\Profiler::set_span_id
+     * @covers Lunr\Ticks\Profiling\Profiler::setSpanId
      */
     public function testSetSpanId(): void
     {
         $spanID = '3f946299-16b5-44ee-8290-3f0fdbbbab1d';
 
         $this->event->expects($this->once())
-                    ->method('add_fields')
+                    ->method('addFields')
                     ->with([ 'spanID' => $spanID ]);
 
-        $this->class->set_span_id($spanID);
+        $this->class->setSpanId($spanID);
     }
 
     /**
-     * Test that add_field() adds a field to the event.
+     * Test that addField() adds a field to the event.
      *
-     * @covers Lunr\Ticks\Profiling\Profiler::add_field
+     * @covers Lunr\Ticks\Profiling\Profiler::addField
      */
     public function testAddField(): void
     {
         $this->event->expects($this->once())
-                    ->method('add_fields')
+                    ->method('addFields')
                     ->with([ 'foo' => 'bar' ]);
 
-        $this->class->add_field('foo', 'bar');
+        $this->class->addField('foo', 'bar');
     }
 
     /**
-     * Test that add_fields() adds fields to the event.
+     * Test that addFields() adds fields to the event.
      *
-     * @covers Lunr\Ticks\Profiling\Profiler::add_fields
+     * @covers Lunr\Ticks\Profiling\Profiler::addFields
      */
     public function testAddFields(): void
     {
         $this->event->expects($this->once())
-                    ->method('add_fields')
+                    ->method('addFields')
                     ->with([ 'foo' => 'bar' ]);
 
-        $this->class->add_fields([ 'foo' => 'bar' ]);
+        $this->class->addFields([ 'foo' => 'bar' ]);
     }
 
     /**
-     * Test that add_tag() adds a tag to the event.
+     * Test that addTag() adds a tag to the event.
      *
-     * @covers Lunr\Ticks\Profiling\Profiler::add_tag
+     * @covers Lunr\Ticks\Profiling\Profiler::addTag
      */
     public function testAddTag(): void
     {
         $this->event->expects($this->once())
-                    ->method('add_tags')
+                    ->method('addTags')
                     ->with([ 'foo' => 'bar' ]);
 
-        $this->class->add_tag('foo', 'bar');
+        $this->class->addTag('foo', 'bar');
     }
 
     /**
-     * Test that add_tags() adds tags to the event.
+     * Test that addTags() adds tags to the event.
      *
-     * @covers Lunr\Ticks\Profiling\Profiler::add_tags
+     * @covers Lunr\Ticks\Profiling\Profiler::addTags
      */
     public function testAddTags(): void
     {
         $this->event->expects($this->once())
-                    ->method('add_tags')
+                    ->method('addTags')
                     ->with([ 'foo' => 'bar' ]);
 
-        $this->class->add_tags([ 'foo' => 'bar' ]);
+        $this->class->addTags([ 'foo' => 'bar' ]);
     }
 
 }

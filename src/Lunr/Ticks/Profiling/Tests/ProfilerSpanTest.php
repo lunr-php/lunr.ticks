@@ -18,15 +18,15 @@ class ProfilerSpanTest extends ProfilerTestCase
 {
 
     /**
-     * Test finalize_previous_span() with no previous span.
+     * Test finalizePreviousSpan() with no previous span.
      *
-     * @covers Lunr\Ticks\Profiling\Profiler::finalize_previous_span
+     * @covers Lunr\Ticks\Profiling\Profiler::finalizePreviousSpan
      */
     public function testFinalizePreviousSpanWithNoPreviousSpan(): void
     {
         $spanID = '8d1a5341-16f9-4608-bf51-db198e52575c';
 
-        $method = $this->getReflectionMethod('finalize_previous_span');
+        $method = $this->getReflectionMethod('finalizePreviousSpan');
 
         $method->invokeArgs($this->class, [ 1734352683.4537 ]);
 
@@ -34,9 +34,9 @@ class ProfilerSpanTest extends ProfilerTestCase
     }
 
     /**
-     * Test finalize_previous_span() with a previous span.
+     * Test finalizePreviousSpan() with a previous span.
      *
-     * @covers Lunr\Ticks\Profiling\Profiler::finalize_previous_span
+     * @covers Lunr\Ticks\Profiling\Profiler::finalizePreviousSpan
      */
     public function testFinalizePreviousSpanWithPreviousSpan(): void
     {
@@ -53,7 +53,7 @@ class ProfilerSpanTest extends ProfilerTestCase
 
         $this->setReflectionPropertyValue('spans', [ $base ]);
 
-        $method = $this->getReflectionMethod('finalize_previous_span');
+        $method = $this->getReflectionMethod('finalizePreviousSpan');
 
         $method->invokeArgs($this->class, [ 1734352683.4537 ]);
 
@@ -70,9 +70,9 @@ class ProfilerSpanTest extends ProfilerTestCase
     }
 
     /**
-     * Test start_new_span() with no previous span.
+     * Test startNewSpan() with no previous span.
      *
-     * @covers Lunr\Ticks\Profiling\Profiler::start_new_span
+     * @covers Lunr\Ticks\Profiling\Profiler::startNewSpan
      */
     public function testStartNewSpanWithNoPreviousSpan(): void
     {
@@ -85,7 +85,7 @@ class ProfilerSpanTest extends ProfilerTestCase
 
         $spanID = '8d1a5341-16f9-4608-bf51-db198e52575c';
 
-        $this->class->start_new_span('Unit test run', $spanID);
+        $this->class->startNewSpan('Unit test run', $spanID);
 
         $expected = [
             'name'           => 'UnitTestRun',
@@ -104,9 +104,9 @@ class ProfilerSpanTest extends ProfilerTestCase
     }
 
     /**
-     * Test start_new_span() with a previous span.
+     * Test startNewSpan() with a previous span.
      *
-     * @covers Lunr\Ticks\Profiling\Profiler::start_new_span
+     * @covers Lunr\Ticks\Profiling\Profiler::startNewSpan
      */
     public function testStartNewSpanWithPreviousSpan(): void
     {
@@ -132,7 +132,7 @@ class ProfilerSpanTest extends ProfilerTestCase
 
         $spanID2 = '9da74534-21d6-4a75-b58e-d27273a35330';
 
-        $this->class->start_new_span('Unit test run 2', $spanID2);
+        $this->class->startNewSpan('Unit test run 2', $spanID2);
 
         $expected = [
             [
