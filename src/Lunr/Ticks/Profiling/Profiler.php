@@ -13,6 +13,9 @@ use Lunr\Ticks\EventLogging\EventInterface;
 
 /**
  * A generic profiler.
+ *
+ * @phpstan-import-type Tags from EventInterface
+ * @phpstan-import-type Fields from EventInterface
  */
 class Profiler
 {
@@ -25,13 +28,13 @@ class Profiler
 
     /**
      * Fields to add to influxdb points
-     * @var array<string,bool|float|int|string|null>
+     * @var Fields
      */
     protected array $fields;
 
     /**
      * Tags to add to influxdb points
-     * @var array<string,string>
+     * @var Tags
      */
     protected array $tags;
 
@@ -117,7 +120,7 @@ class Profiler
      *
      * Set new values on top of previously set values.
      *
-     * @param array<string,bool|float|int|string|null> $fields Unstructured metadata
+     * @param Fields $fields Unstructured metadata
      *
      * @return void
      */
@@ -144,7 +147,7 @@ class Profiler
      *
      * Set new values on top of previously set values.
      *
-     * @param array<string,string|null> $tags Indexed metadata
+     * @param Tags $tags Indexed metadata
      *
      * @return void
      */
