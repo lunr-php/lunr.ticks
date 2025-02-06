@@ -14,7 +14,7 @@
         <ini name="zend.enable_gc" value="1"/>
     </php>
     <testsuites>
-        <testsuite name="Profling">
+        <testsuite name="Profiling">
             <directory>../src/Lunr/Ticks/Profiling/Tests/</directory>
         </testsuite>
         <testsuite name="NullEventLogging">
