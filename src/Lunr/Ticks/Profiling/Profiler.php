@@ -10,6 +10,9 @@
 namespace Lunr\Ticks\Profiling;
 
 use Lunr\Ticks\EventLogging\EventInterface;
+use Lunr\Ticks\TracingControllerInterface;
+use Lunr\Ticks\TracingInfoInterface;
+use RuntimeException;
 
 /**
  * A generic profiler.
@@ -27,6 +30,12 @@ class Profiler
     protected readonly EventInterface $event;
 
     /**
+     * A tracing controller.
+     * @var TracingControllerInterface&TracingInfoInterface
+     */
+    protected readonly TracingControllerInterface&TracingInfoInterface $controller;
+
+    /**
      * Fields to add to influxdb points
      * @var Fields
      */
@@ -40,7 +49,7 @@ class Profiler
 
     /**
      * Set of profiled spans
-     * @var array<int,array{"name":string,"spanId":string,"startTimestamp":float,"memory":int,"memoryPeak":int,"runTime":float}>
+     * @var array<int,array{"name":string,"spanID":string,"startTimestamp":float,"memory":int,"memoryPeak":int,"runTime":float}>
      */
     protected array $spans;
 
@@ -53,9 +62,10 @@ class Profiler
     /**
      * Constructor.
      *
-     * @param EventInterface $event An observability event.
+     * @param EventInterface                                  $event      An observability event.
+     * @param TracingControllerInterface&TracingInfoInterface $controller A tracing controller.
      */
-    public function __construct(EventInterface $event)
+    public function __construct(EventInterface $event, TracingControllerInterface&TracingInfoInterface $controller)
     {
         $this->startTimestamp = microtime(TRUE);
 
@@ -63,7 +73,8 @@ class Profiler
         $this->tags   = [];
         $this->spans  = [];
 
-        $this->event = $event;
+        $this->event      = $event;
+        $this->controller = $controller;
     }
 
     /**
@@ -75,31 +86,6 @@ class Profiler
 
         unset($this->tags);
         unset($this->fields);
-    }
-
-    /**
-     * Set trace ID the event belongs to.
-     *
-     * @param string $trace_id Trace ID
-     *
-     * @return void
-     */
-    public function setTraceId(string $trace_id): void
-    {
-        $this->event->setTraceId($trace_id);
-    }
-
-    /**
-     * Set span ID the event belongs to.
-     *
-     * @param string $span_id Span ID
-     *
-     * @return void
-     */
-    public function setSpanId(string $span_id): void
-    {
-        // InfluxDB 1.x doesn't do well with UUID tag values, so we store this as a field
-        $this->event->addFields([ 'spanID' => $span_id ]);
     }
 
     /**
@@ -159,20 +145,21 @@ class Profiler
     /**
      * Report start of a span
      *
-     * @param string $name   Name (identifier) of the Span
-     * @param string $spanID ID of the new Span
+     * @param string $name Name (identifier) of the Span
      *
      * @return void
      */
-    public function startNewSpan(string $name, string $spanID): void
+    public function startNewSpan(string $name): void
     {
         $start = microtime(TRUE);
 
         $this->finalizePreviousSpan($start);
 
+        $this->controller->startChildSpan();
+
         $span = [
             'name'           => str_replace(' ', '', ucwords($name)),
-            'spanId'         => $spanID,
+            'spanID'         => $this->controller->getSpanId() ?? throw new RuntimeException('Span ID not available!'),
             'startTimestamp' => $start,
             'memory'         => memory_get_usage(),
             'memoryPeak'     => memory_get_peak_usage(),
@@ -198,6 +185,8 @@ class Profiler
             return;
         }
 
+        $this->controller->stopChildSpan();
+
         if (isset($this->spans[$last_report]))
         {
             $this->spans[$last_report]['runTime'] = (float) bcsub((string) $time, (string) $this->spans[$last_report]['startTimestamp'], 4);
@@ -221,15 +210,16 @@ class Profiler
             'totalRunTime'   => (float) bcsub((string) $time, (string) $this->startTimestamp, 4),
             'memory'         => memory_get_usage(),
             'memoryPeak'     => memory_get_peak_usage(),
+            'spanID'         => $this->controller->getSpanId() ?? throw new RuntimeException('Span ID not available!'),
         ];
 
         foreach ($this->spans as $span)
         {
             $name = $span['name'];
 
-            $this->event->setUuidValue('spanId' . $name, $span['spanId']);
+            $this->event->setUuidValue('spanId' . $name, $span['spanID']);
 
-            unset($span['spanId'], $span['name']);
+            unset($span['spanID'], $span['name']);
 
             foreach ($span as $key => $field)
             {
@@ -237,6 +227,7 @@ class Profiler
             }
         }
 
+        $this->event->setTraceId($this->controller->getTraceId() ?? throw new RuntimeException('Trace ID not available!'));
         $this->event->addFields($fields);
         $this->event->addTags($this->tags);
         $this->event->recordTimestamp();

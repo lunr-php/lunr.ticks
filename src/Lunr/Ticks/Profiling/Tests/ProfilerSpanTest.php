@@ -9,6 +9,8 @@
 
 namespace Lunr\Ticks\Profiling\Tests;
 
+use RuntimeException;
+
 /**
  * This class contains tests for the Profiler class.
  *
@@ -44,7 +46,7 @@ class ProfilerSpanTest extends ProfilerTestCase
 
         $base = [
             'name'           => 'UnitTestRun',
-            'spanId'         => $spanID,
+            'spanID'         => $spanID,
             'startTimestamp' => $this->startTimestamp,
             'memory'         => 526160,
             'memoryPeak'     => 561488,
@@ -53,13 +55,16 @@ class ProfilerSpanTest extends ProfilerTestCase
 
         $this->setReflectionPropertyValue('spans', [ $base ]);
 
+        $this->controller->shouldReceive('stopChildSpan')
+                         ->once();
+
         $method = $this->getReflectionMethod('finalizePreviousSpan');
 
         $method->invokeArgs($this->class, [ 1734352683.4537 ]);
 
         $expected = [
             'name'           => 'UnitTestRun',
-            'spanId'         => $spanID,
+            'spanID'         => $spanID,
             'startTimestamp' => $this->startTimestamp,
             'memory'         => 526160,
             'memoryPeak'     => 561488,
@@ -67,6 +72,26 @@ class ProfilerSpanTest extends ProfilerTestCase
         ];
 
         $this->assertSame($this->getReflectionPropertyValue('spans'), [ $expected ]);
+    }
+
+    /**
+     * Test startNewSpan() throws an exception if the Span ID is not available.
+     *
+     * @covers Lunr\Ticks\Profiling\Profiler::startNewSpan
+     */
+    public function testStartNewSpanThrowsExceptionIfSpanIDNotAvailable(): void
+    {
+        $this->controller->shouldReceive('getSpanId')
+                         ->once()
+                         ->andReturn(NULL);
+
+        $this->controller->shouldReceive('startChildSpan')
+                         ->once();
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Span ID not available!');
+
+        $this->class->startNewSpan('Unit test run');
     }
 
     /**
@@ -85,11 +110,18 @@ class ProfilerSpanTest extends ProfilerTestCase
 
         $spanID = '8d1a5341-16f9-4608-bf51-db198e52575c';
 
-        $this->class->startNewSpan('Unit test run', $spanID);
+        $this->controller->shouldReceive('getSpanId')
+                         ->once()
+                         ->andReturn($spanID);
+
+        $this->controller->shouldReceive('startChildSpan')
+                         ->once();
+
+        $this->class->startNewSpan('Unit test run');
 
         $expected = [
             'name'           => 'UnitTestRun',
-            'spanId'         => $spanID,
+            'spanID'         => $spanID,
             'startTimestamp' => $floatval,
             'memory'         => 526160,
             'memoryPeak'     => 561488,
@@ -117,11 +149,22 @@ class ProfilerSpanTest extends ProfilerTestCase
         $this->mockFunction('memory_get_usage', fn() => 526160);
         $this->mockFunction('memory_get_peak_usage', fn() => 561488);
 
-        $spanID = '8d1a5341-16f9-4608-bf51-db198e52575c';
+        $spanID  = '8d1a5341-16f9-4608-bf51-db198e52575c';
+        $spanID2 = '9da74534-21d6-4a75-b58e-d27273a35330';
+
+        $this->controller->shouldReceive('getSpanId')
+                         ->once()
+                         ->andReturn($spanID2);
+
+        $this->controller->shouldReceive('stopChildSpan')
+                         ->once();
+
+        $this->controller->shouldReceive('startChildSpan')
+                         ->once();
 
         $base = [
             'name'           => 'UnitTestRun',
-            'spanId'         => $spanID,
+            'spanID'         => $spanID,
             'startTimestamp' => $this->startTimestamp,
             'memory'         => 526161,
             'memoryPeak'     => 561489,
@@ -130,14 +173,12 @@ class ProfilerSpanTest extends ProfilerTestCase
 
         $this->setReflectionPropertyValue('spans', [ $base ]);
 
-        $spanID2 = '9da74534-21d6-4a75-b58e-d27273a35330';
-
-        $this->class->startNewSpan('Unit test run 2', $spanID2);
+        $this->class->startNewSpan('Unit test run 2');
 
         $expected = [
             [
                 'name'           => 'UnitTestRun',
-                'spanId'         => $spanID,
+                'spanID'         => $spanID,
                 'startTimestamp' => $this->startTimestamp,
                 'memory'         => 526161,
                 'memoryPeak'     => 561489,
@@ -145,7 +186,7 @@ class ProfilerSpanTest extends ProfilerTestCase
             ],
             [
                 'name'           => 'UnitTestRun2',
-                'spanId'         => $spanID2,
+                'spanID'         => $spanID2,
                 'startTimestamp' => $floatval,
                 'memory'         => 526160,
                 'memoryPeak'     => 561488,

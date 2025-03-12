@@ -9,6 +9,8 @@
 
 namespace Lunr\Ticks\Profiling\Tests;
 
+use RuntimeException;
+
 /**
  * This class contains tests for the Profiler class.
  *
@@ -16,6 +18,48 @@ namespace Lunr\Ticks\Profiling\Tests;
  */
 class ProfilerRecordTest extends ProfilerTestCase
 {
+
+    /**
+     * Test record() throws an exception if the Span ID is not available.
+     *
+     * @covers Lunr\Ticks\Profiling\Profiler::record
+     */
+    public function testRecordThrowsExceptionIfSpanIdNotAvailable(): void
+    {
+        $this->controller->shouldReceive('getSpanId')
+                         ->once()
+                         ->andReturn(NULL);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Span ID not available!');
+
+        $method = $this->getReflectionMethod('record');
+
+        $method->invoke($this->class);
+    }
+
+    /**
+     * Test record() throws an exception if the Trace ID is not available.
+     *
+     * @covers Lunr\Ticks\Profiling\Profiler::record
+     */
+    public function testRecordThrowsExceptionIfTraceIdNotAvailable(): void
+    {
+        $this->controller->shouldReceive('getTraceId')
+                         ->once()
+                         ->andReturn(NULL);
+
+        $this->controller->shouldReceive('getSpanId')
+                         ->once()
+                         ->andReturn('3f946299-16b5-44ee-8290-3f0fdbbbab1d');
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Trace ID not available!');
+
+        $method = $this->getReflectionMethod('record');
+
+        $method->invoke($this->class);
+    }
 
     /**
      * Test record() with no spans.
@@ -31,12 +75,25 @@ class ProfilerRecordTest extends ProfilerTestCase
         $this->mockFunction('memory_get_usage', fn() => 526160);
         $this->mockFunction('memory_get_peak_usage', fn() => 561488);
 
+        $this->controller->shouldReceive('getTraceId')
+                         ->once()
+                         ->andReturn('e0af2cd4-6a1c-4bd6-8fca-d3684e699784');
+
+        $this->controller->shouldReceive('getSpanId')
+                         ->once()
+                         ->andReturn('3f946299-16b5-44ee-8290-3f0fdbbbab1d');
+
+        $this->event->shouldReceive('setTraceId')
+                    ->once()
+                    ->with('e0af2cd4-6a1c-4bd6-8fca-d3684e699784');
+
         $fields = [
             'startTimestamp' => 1734352683.3516,
             'endTimestamp'   => 1734352684.6526,
             'totalRunTime'   => 1.3010,
             'memory'         => 526160,
             'memoryPeak'     => 561488,
+            'spanID'         => '3f946299-16b5-44ee-8290-3f0fdbbbab1d',
         ];
 
         $this->event->shouldReceive('addFields')
@@ -67,7 +124,7 @@ class ProfilerRecordTest extends ProfilerTestCase
      *
      * @covers Lunr\Ticks\Profiling\Profiler::record
      */
-    public function testRecordWithOneSpans(): void
+    public function testRecordWithOneSpan(): void
     {
         $floatval  = 1734352684.6526;
         $stringval = '0.65260200 1734352684';
@@ -76,11 +133,12 @@ class ProfilerRecordTest extends ProfilerTestCase
         $this->mockFunction('memory_get_usage', fn() => 526160);
         $this->mockFunction('memory_get_peak_usage', fn() => 561488);
 
-        $spanID = '8d1a5341-16f9-4608-bf51-db198e52575c';
+        $spanID  = '3f946299-16b5-44ee-8290-3f0fdbbbab1d';
+        $spanID1 = '8d1a5341-16f9-4608-bf51-db198e52575c';
 
         $base = [
             'name'           => 'UnitTestRun',
-            'spanId'         => $spanID,
+            'spanID'         => $spanID1,
             'startTimestamp' => $this->startTimestamp,
             'memory'         => 526161,
             'memoryPeak'     => 561489,
@@ -91,6 +149,21 @@ class ProfilerRecordTest extends ProfilerTestCase
         $this->setReflectionPropertyValue('fields', [ 'baz' => 2.0 ]);
         $this->setReflectionPropertyValue('tags', [ 'foo' => 'bar' ]);
 
+        $this->controller->shouldReceive('getTraceId')
+                         ->once()
+                         ->andReturn('e0af2cd4-6a1c-4bd6-8fca-d3684e699784');
+
+        $this->controller->shouldReceive('getSpanId')
+                         ->once()
+                         ->andReturn($spanID);
+
+        $this->controller->shouldReceive('stopChildSpan')
+                         ->once();
+
+        $this->event->shouldReceive('setTraceId')
+                    ->once()
+                    ->with('e0af2cd4-6a1c-4bd6-8fca-d3684e699784');
+
         $fields = [
             'baz'                       => 2.0,
             'startTimestamp'            => 1734352683.3516,
@@ -98,6 +171,7 @@ class ProfilerRecordTest extends ProfilerTestCase
             'totalRunTime'              => 1.3010,
             'memory'                    => 526160,
             'memoryPeak'                => 561488,
+            'spanID'                    => $spanID,
             'startTimestampUnitTestRun' => 1734352683.3516,
             'memoryUnitTestRun'         => 526161,
             'memoryPeakUnitTestRun'     => 561489,
@@ -124,7 +198,7 @@ class ProfilerRecordTest extends ProfilerTestCase
 
         $this->event->shouldReceive('setUuidValue')
                     ->once()
-                    ->with('spanIdUnitTestRun', $spanID);
+                    ->with('spanIdUnitTestRun', $spanID1);
 
         $method = $this->getReflectionMethod('record');
 
@@ -149,13 +223,29 @@ class ProfilerRecordTest extends ProfilerTestCase
         $this->mockFunction('memory_get_usage', fn() => 526160);
         $this->mockFunction('memory_get_peak_usage', fn() => 561488);
 
-        $spanID  = '8d1a5341-16f9-4608-bf51-db198e52575c';
+        $spanID  = '3f946299-16b5-44ee-8290-3f0fdbbbab1d';
+        $spanID1 = '8d1a5341-16f9-4608-bf51-db198e52575c';
         $spanID2 = '9da74534-21d6-4a75-b58e-d27273a35330';
+
+        $this->controller->shouldReceive('getTraceId')
+                         ->once()
+                         ->andReturn('e0af2cd4-6a1c-4bd6-8fca-d3684e699784');
+
+        $this->controller->shouldReceive('getSpanId')
+                         ->once()
+                         ->andReturn($spanID);
+
+        $this->controller->shouldReceive('stopChildSpan')
+                         ->once();
+
+        $this->event->shouldReceive('setTraceId')
+                    ->once()
+                    ->with('e0af2cd4-6a1c-4bd6-8fca-d3684e699784');
 
         $base = [
             [
                 'name'           => 'UnitTestRun',
-                'spanId'         => $spanID,
+                'spanID'         => $spanID1,
                 'startTimestamp' => $this->startTimestamp,
                 'memory'         => 526161,
                 'memoryPeak'     => 561489,
@@ -163,7 +253,7 @@ class ProfilerRecordTest extends ProfilerTestCase
             ],
             [
                 'name'           => 'AnotherUnitTestRun',
-                'spanId'         => $spanID2,
+                'spanID'         => $spanID2,
                 'startTimestamp' => 1734352683.3517,
                 'memory'         => 526161,
                 'memoryPeak'     => 561489,
@@ -182,6 +272,7 @@ class ProfilerRecordTest extends ProfilerTestCase
             'totalRunTime'                     => 1.3010,
             'memory'                           => 526160,
             'memoryPeak'                       => 561488,
+            'spanID'                           => $spanID,
             'startTimestampUnitTestRun'        => 1734352683.3516,
             'memoryUnitTestRun'                => 526161,
             'memoryPeakUnitTestRun'            => 561489,
@@ -212,7 +303,7 @@ class ProfilerRecordTest extends ProfilerTestCase
 
         $this->event->shouldReceive('setUuidValue')
                     ->once()
-                    ->with('spanIdUnitTestRun', $spanID);
+                    ->with('spanIdUnitTestRun', $spanID1);
 
         $this->event->shouldReceive('setUuidValue')
                     ->once()

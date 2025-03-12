@@ -18,38 +18,6 @@ class ProfilerSetTest extends ProfilerTestCase
 {
 
     /**
-     * Test that setTraceId() sets a trace ID on the event.
-     *
-     * @covers Lunr\Ticks\Profiling\Profiler::setTraceId
-     */
-    public function testSetTraceId(): void
-    {
-        $traceID = 'e0af2cd4-6a1c-4bd6-8fca-d3684e699784';
-
-        $this->event->shouldReceive('setTraceId')
-                    ->once()
-                    ->with($traceID);
-
-        $this->class->setTraceId($traceID);
-    }
-
-    /**
-     * Test that setSpanId() sets a span ID on the event.
-     *
-     * @covers Lunr\Ticks\Profiling\Profiler::setSpanId
-     */
-    public function testSetSpanId(): void
-    {
-        $spanID = '3f946299-16b5-44ee-8290-3f0fdbbbab1d';
-
-        $this->event->shouldReceive('addFields')
-                    ->once()
-                    ->with([ 'spanID' => $spanID ]);
-
-        $this->class->setSpanId($spanID);
-    }
-
-    /**
      * Test that addField() adds a field to the event.
      *
      * @covers Lunr\Ticks\Profiling\Profiler::addField

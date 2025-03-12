@@ -26,6 +26,14 @@ class ProfilerBaseTest extends ProfilerTestCase
     }
 
     /**
+     * Test that the Controller class is passed correctly.
+     */
+    public function testControllerIsPassedCorrectly(): void
+    {
+        $this->assertPropertySame('controller', $this->controller);
+    }
+
+    /**
      * Test that the fields array is initialized empty.
      */
     public function testFieldsIsInitializedEmpty(): void
