@@ -39,19 +39,19 @@ class ProfilerRecordTest extends ProfilerTestCase
             'memoryPeak'     => 561488,
         ];
 
-        $this->event->expects($this->once())
-                    ->method('addFields')
+        $this->event->shouldReceive('addFields')
+                    ->once()
                     ->with($fields);
 
-        $this->event->expects($this->once())
-                    ->method('addTags')
+        $this->event->shouldReceive('addTags')
+                    ->once()
                     ->with([]);
 
-        $this->event->expects($this->once())
-                    ->method('recordTimestamp');
+        $this->event->shouldReceive('recordTimestamp')
+                    ->once();
 
-        $this->event->expects($this->once())
-                    ->method('record');
+        $this->event->shouldReceive('record')
+                    ->once();
 
         $method = $this->getReflectionMethod('record');
 
@@ -104,26 +104,26 @@ class ProfilerRecordTest extends ProfilerTestCase
             'runTimeUnitTestRun'        => 1.301,
         ];
 
-        $this->event->expects($this->once())
-                    ->method('addFields')
+        $this->event->shouldReceive('addFields')
+                    ->once()
                     ->with($fields);
 
         $tags = [
             'foo' => 'bar',
         ];
 
-        $this->event->expects($this->once())
-                    ->method('addTags')
+        $this->event->shouldReceive('addTags')
+                    ->once()
                     ->with($tags);
 
-        $this->event->expects($this->once())
-                    ->method('recordTimestamp');
+        $this->event->shouldReceive('recordTimestamp')
+                    ->once();
 
-        $this->event->expects($this->once())
-                    ->method('record');
+        $this->event->shouldReceive('record')
+                    ->once();
 
-        $this->event->expects($this->once())
-                    ->method('setUuidValue')
+        $this->event->shouldReceive('setUuidValue')
+                    ->once()
                     ->with('spanIdUnitTestRun', $spanID);
 
         $method = $this->getReflectionMethod('record');
@@ -192,30 +192,31 @@ class ProfilerRecordTest extends ProfilerTestCase
             'runTimeAnotherUnitTestRun'        => 1.3009,
         ];
 
-        $this->event->expects($this->once())
-                    ->method('addFields')
+        $this->event->shouldReceive('addFields')
+                    ->once()
                     ->with($fields);
 
         $tags = [
             'foo' => 'bar',
         ];
 
-        $this->event->expects($this->once())
-                    ->method('addTags')
+        $this->event->shouldReceive('addTags')
+                    ->once()
                     ->with($tags);
 
-        $this->event->expects($this->once())
-                    ->method('recordTimestamp');
+        $this->event->shouldReceive('recordTimestamp')
+                    ->once();
 
-        $this->event->expects($this->once())
-                    ->method('record');
+        $this->event->shouldReceive('record')
+                    ->once();
 
-        $this->event->expects($this->exactly(2))
-                    ->method('setUuidValue')
-                    ->withConsecutive(
-                        [ 'spanIdUnitTestRun', $spanID ],
-                        [ 'spanIdAnotherUnitTestRun', $spanID2 ]
-                    );
+        $this->event->shouldReceive('setUuidValue')
+                    ->once()
+                    ->with('spanIdUnitTestRun', $spanID);
+
+        $this->event->shouldReceive('setUuidValue')
+                    ->once()
+                    ->with('spanIdAnotherUnitTestRun', $spanID2);
 
         $method = $this->getReflectionMethod('record');
 

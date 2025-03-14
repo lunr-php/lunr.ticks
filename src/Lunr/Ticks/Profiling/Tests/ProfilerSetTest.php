@@ -26,8 +26,8 @@ class ProfilerSetTest extends ProfilerTestCase
     {
         $traceID = 'e0af2cd4-6a1c-4bd6-8fca-d3684e699784';
 
-        $this->event->expects($this->once())
-                    ->method('setTraceId')
+        $this->event->shouldReceive('setTraceId')
+                    ->once()
                     ->with($traceID);
 
         $this->class->setTraceId($traceID);
@@ -42,8 +42,8 @@ class ProfilerSetTest extends ProfilerTestCase
     {
         $spanID = '3f946299-16b5-44ee-8290-3f0fdbbbab1d';
 
-        $this->event->expects($this->once())
-                    ->method('addFields')
+        $this->event->shouldReceive('addFields')
+                    ->once()
                     ->with([ 'spanID' => $spanID ]);
 
         $this->class->setSpanId($spanID);
@@ -56,8 +56,8 @@ class ProfilerSetTest extends ProfilerTestCase
      */
     public function testAddField(): void
     {
-        $this->event->expects($this->once())
-                    ->method('addFields')
+        $this->event->shouldReceive('addFields')
+                    ->once()
                     ->with([ 'foo' => 'bar' ]);
 
         $this->class->addField('foo', 'bar');
@@ -70,8 +70,8 @@ class ProfilerSetTest extends ProfilerTestCase
      */
     public function testAddFields(): void
     {
-        $this->event->expects($this->once())
-                    ->method('addFields')
+        $this->event->shouldReceive('addFields')
+                    ->once()
                     ->with([ 'foo' => 'bar' ]);
 
         $this->class->addFields([ 'foo' => 'bar' ]);
@@ -84,8 +84,8 @@ class ProfilerSetTest extends ProfilerTestCase
      */
     public function testAddTag(): void
     {
-        $this->event->expects($this->once())
-                    ->method('addTags')
+        $this->event->shouldReceive('addTags')
+                    ->once()
                     ->with([ 'foo' => 'bar' ]);
 
         $this->class->addTag('foo', 'bar');
@@ -98,8 +98,8 @@ class ProfilerSetTest extends ProfilerTestCase
      */
     public function testAddTags(): void
     {
-        $this->event->expects($this->once())
-                    ->method('addTags')
+        $this->event->shouldReceive('addTags')
+                    ->once()
                     ->with([ 'foo' => 'bar' ]);
 
         $this->class->addTags([ 'foo' => 'bar' ]);

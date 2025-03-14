@@ -7,5 +7,13 @@
             "prefix": "Lunr\\Halo",
             "search-path": "/src/Lunr/Halo/"
         }
+    },
+    "Mockery": {
+        "url": "https://github.com/mockery/mockery.git",
+        "version": "1.6.12",
+        "psr0": {
+            "path": "/library/"
+        },
+        "development-only": true
     }
 }

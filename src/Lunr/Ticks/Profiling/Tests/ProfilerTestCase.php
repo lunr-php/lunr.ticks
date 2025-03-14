@@ -12,6 +12,9 @@ namespace Lunr\Ticks\Profiling\Tests;
 use Lunr\Halo\LunrBaseTestCase;
 use Lunr\Ticks\EventLogging\EventInterface;
 use Lunr\Ticks\Profiling\Profiler;
+use Mockery;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use Mockery\MockInterface;
 
 /**
  * This class contains common setup routines, providers
@@ -21,12 +24,13 @@ use Lunr\Ticks\Profiling\Profiler;
  */
 abstract class ProfilerTestCase extends LunrBaseTestCase
 {
+    use MockeryPHPUnitIntegration;
 
     /**
      * Mock instance of an Event
-     * @var EventInterface
+     * @var EventInterface&MockInterface
      */
-    protected EventInterface $event;
+    protected EventInterface&MockInterface $event;
 
     /**
      * Instance of the tested class.
@@ -47,8 +51,7 @@ abstract class ProfilerTestCase extends LunrBaseTestCase
      */
     public function setUp(): void
     {
-        $this->event = $this->getMockBuilder(EventInterface::class)
-                            ->getMock();
+        $this->event = Mockery::mock(EventInterface::class);
 
         $floatval  = 1734352683.3516;
         $stringval = '0.35160200 1734352683';
@@ -70,6 +73,21 @@ abstract class ProfilerTestCase extends LunrBaseTestCase
     public function tearDown(): void
     {
         parent::tearDown();
+
+        $this->event->shouldReceive('addFields')
+                    ->once();
+
+        $this->event->shouldReceive('addTags')
+                    ->once();
+
+        $this->event->shouldReceive('setUuidValue')
+                    ->zeroOrMoreTimes();
+
+        $this->event->shouldReceive('recordTimestamp')
+                    ->once();
+
+        $this->event->shouldReceive('record')
+                    ->once();
 
         unset($this->event);
         unset($this->class);
