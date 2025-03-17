@@ -15,6 +15,9 @@
          displayDetailsOnTestsThatTriggerWarnings="true"
          displayDetailsOnPhpunitDeprecations="true">
     <testsuites>
+        <testsuite name="Enums">
+            <directory>../src/Lunr/Ticks/Tests/</directory>
+        </testsuite>
         <testsuite name="Profiling">
             <directory>../src/Lunr/Ticks/Profiling/Tests/</directory>
         </testsuite>
