@@ -14,7 +14,7 @@ use Lunr\Ticks\Precision;
 /**
  * Interface for events.
  *
- * @phpstan-type Tags   array<string,string|null>
+ * @phpstan-type Tags   array<string,bool|string|null>
  * @phpstan-type Fields array<string,scalar|null>
  */
 interface EventInterface
