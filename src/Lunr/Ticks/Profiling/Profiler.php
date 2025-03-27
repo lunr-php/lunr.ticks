@@ -60,6 +60,12 @@ class Profiler
     protected readonly float $startTimestamp;
 
     /**
+     * Whether or not the analytics should be recorded.
+     * @var bool
+     */
+    protected bool $shouldRecord;
+
+    /**
      * Constructor.
      *
      * @param EventInterface                                  $event      An observability event.
@@ -73,6 +79,8 @@ class Profiler
         $this->tags   = [];
         $this->spans  = [];
 
+        $this->shouldRecord = TRUE;
+
         $this->event      = $event;
         $this->controller = $controller;
     }
@@ -82,10 +90,25 @@ class Profiler
      */
     public function __destruct()
     {
-        $this->record();
+        if ($this->shouldRecord)
+        {
+            $this->record();
+        }
 
         unset($this->tags);
         unset($this->fields);
+    }
+
+    /**
+     * Whether or not the analytics should be recorded.
+     *
+     * @param bool $shouldBeRecorded Whether or not the analytics should be recorded.
+     *
+     * @return void
+     */
+    public function shouldBeRecorded(bool $shouldBeRecorded): void
+    {
+        $this->shouldRecord = $shouldBeRecorded;
     }
 
     /**
