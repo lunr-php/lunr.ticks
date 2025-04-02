@@ -88,12 +88,12 @@ class ProfilerRecordTest extends ProfilerTestCase
                     ->with('e0af2cd4-6a1c-4bd6-8fca-d3684e699784');
 
         $fields = [
-            'startTimestamp' => 1734352683.3516,
-            'endTimestamp'   => 1734352684.6526,
-            'totalRunTime'   => 1.3010,
-            'memory'         => 526160,
-            'memoryPeak'     => 561488,
-            'spanID'         => '3f946299-16b5-44ee-8290-3f0fdbbbab1d',
+            'startTimestamp'     => 1734352683.3516,
+            'endTimestamp'       => 1734352684.6526,
+            'totalExecutionTime' => 1.3010,
+            'memory'             => 526160,
+            'memoryPeak'         => 561488,
+            'spanID'             => '3f946299-16b5-44ee-8290-3f0fdbbbab1d',
         ];
 
         $this->event->shouldReceive('addFields')
@@ -142,7 +142,7 @@ class ProfilerRecordTest extends ProfilerTestCase
             'startTimestamp' => $this->startTimestamp,
             'memory'         => 526161,
             'memoryPeak'     => 561489,
-            'runTime'        => 0,
+            'executionTime'  => 0,
         ];
 
         $this->setReflectionPropertyValue('spans', [ $base ]);
@@ -168,14 +168,14 @@ class ProfilerRecordTest extends ProfilerTestCase
             'baz'                       => 2.0,
             'startTimestamp'            => 1734352683.3516,
             'endTimestamp'              => 1734352684.6526,
-            'totalRunTime'              => 1.3010,
+            'totalExecutionTime'        => 1.3010,
             'memory'                    => 526160,
             'memoryPeak'                => 561488,
             'spanID'                    => $spanID,
             'startTimestampUnitTestRun' => 1734352683.3516,
             'memoryUnitTestRun'         => 526161,
             'memoryPeakUnitTestRun'     => 561489,
-            'runTimeUnitTestRun'        => 1.301,
+            'executionTimeUnitTestRun'  => 1.301,
         ];
 
         $this->event->shouldReceive('addFields')
@@ -249,7 +249,7 @@ class ProfilerRecordTest extends ProfilerTestCase
                 'startTimestamp' => $this->startTimestamp,
                 'memory'         => 526161,
                 'memoryPeak'     => 561489,
-                'runTime'        => 0.0001,
+                'executionTime'  => 0.0001,
             ],
             [
                 'name'           => 'AnotherUnitTestRun',
@@ -257,7 +257,7 @@ class ProfilerRecordTest extends ProfilerTestCase
                 'startTimestamp' => 1734352683.3517,
                 'memory'         => 526161,
                 'memoryPeak'     => 561489,
-                'runTime'        => 0,
+                'executionTime'  => 0,
             ]
         ];
 
@@ -269,18 +269,18 @@ class ProfilerRecordTest extends ProfilerTestCase
             'baz'                              => 2.0,
             'startTimestamp'                   => 1734352683.3516,
             'endTimestamp'                     => 1734352684.6526,
-            'totalRunTime'                     => 1.3010,
+            'totalExecutionTime'               => 1.3010,
             'memory'                           => 526160,
             'memoryPeak'                       => 561488,
             'spanID'                           => $spanID,
             'startTimestampUnitTestRun'        => 1734352683.3516,
             'memoryUnitTestRun'                => 526161,
             'memoryPeakUnitTestRun'            => 561489,
-            'runTimeUnitTestRun'               => 0.0001,
+            'executionTimeUnitTestRun'         => 0.0001,
             'startTimestampAnotherUnitTestRun' => 1734352683.3517,
             'memoryAnotherUnitTestRun'         => 526161,
             'memoryPeakAnotherUnitTestRun'     => 561489,
-            'runTimeAnotherUnitTestRun'        => 1.3009,
+            'executionTimeAnotherUnitTestRun'  => 1.3009,
         ];
 
         $this->event->shouldReceive('addFields')
