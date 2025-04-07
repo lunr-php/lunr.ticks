@@ -50,7 +50,7 @@ class ProfilerSpanTest extends ProfilerTestCase
             'startTimestamp' => $this->startTimestamp,
             'memory'         => 526160,
             'memoryPeak'     => 561488,
-            'runTime'        => 0,
+            'executionTime'  => 0,
         ];
 
         $this->setReflectionPropertyValue('spans', [ $base ]);
@@ -68,7 +68,7 @@ class ProfilerSpanTest extends ProfilerTestCase
             'startTimestamp' => $this->startTimestamp,
             'memory'         => 526160,
             'memoryPeak'     => 561488,
-            'runTime'        => 0.1021,
+            'executionTime'  => 0.1021,
         ];
 
         $this->assertSame($this->getReflectionPropertyValue('spans'), [ $expected ]);
@@ -125,7 +125,7 @@ class ProfilerSpanTest extends ProfilerTestCase
             'startTimestamp' => $floatval,
             'memory'         => 526160,
             'memoryPeak'     => 561488,
-            'runTime'        => 0,
+            'executionTime'  => 0,
         ];
 
         $this->assertSame($this->getReflectionPropertyValue('spans'), [ $expected ]);
@@ -168,7 +168,7 @@ class ProfilerSpanTest extends ProfilerTestCase
             'startTimestamp' => $this->startTimestamp,
             'memory'         => 526161,
             'memoryPeak'     => 561489,
-            'runTime'        => 0,
+            'executionTime'  => 0,
         ];
 
         $this->setReflectionPropertyValue('spans', [ $base ]);
@@ -182,7 +182,7 @@ class ProfilerSpanTest extends ProfilerTestCase
                 'startTimestamp' => $this->startTimestamp,
                 'memory'         => 526161,
                 'memoryPeak'     => 561489,
-                'runTime'        => 0.001,
+                'executionTime'  => 0.001,
             ],
             [
                 'name'           => 'UnitTestRun2',
@@ -190,7 +190,7 @@ class ProfilerSpanTest extends ProfilerTestCase
                 'startTimestamp' => $floatval,
                 'memory'         => 526160,
                 'memoryPeak'     => 561488,
-                'runTime'        => 0,
+                'executionTime'  => 0,
             ]
         ];
 

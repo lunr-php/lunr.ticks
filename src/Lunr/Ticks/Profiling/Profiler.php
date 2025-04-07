@@ -49,7 +49,7 @@ class Profiler
 
     /**
      * Set of profiled spans
-     * @var array<int,array{"name":string,"spanID":string,"startTimestamp":float,"memory":int,"memoryPeak":int,"runTime":float}>
+     * @var array<int,array{"name":string,"spanID":string,"startTimestamp":float,"memory":int,"memoryPeak":int,"executionTime":float}>
      */
     protected array $spans;
 
@@ -163,14 +163,14 @@ class Profiler
             'startTimestamp' => $start,
             'memory'         => memory_get_usage(),
             'memoryPeak'     => memory_get_peak_usage(),
-            'runTime'        => 0,
+            'executionTime'  => 0,
         ];
 
         $this->spans[] = $span;
     }
 
     /**
-     * Finalize the previous span by writing the runtime.
+     * Finalize the previous span by writing the execution time.
      *
      * @param float $time The current time to use as end time for the previous span.
      *
@@ -189,7 +189,7 @@ class Profiler
 
         if (isset($this->spans[$last_report]))
         {
-            $this->spans[$last_report]['runTime'] = (float) bcsub((string) $time, (string) $this->spans[$last_report]['startTimestamp'], 4);
+            $this->spans[$last_report]['executionTime'] = (float) bcsub((string) $time, (string) $this->spans[$last_report]['startTimestamp'], 4);
         }
     }
 
@@ -205,12 +205,12 @@ class Profiler
         $this->finalizePreviousSpan($time);
 
         $fields = $this->fields + [
-            'startTimestamp' => $this->startTimestamp,
-            'endTimestamp'   => $time,
-            'totalRunTime'   => (float) bcsub((string) $time, (string) $this->startTimestamp, 4),
-            'memory'         => memory_get_usage(),
-            'memoryPeak'     => memory_get_peak_usage(),
-            'spanID'         => $this->controller->getSpanId() ?? throw new RuntimeException('Span ID not available!'),
+            'startTimestamp'     => $this->startTimestamp,
+            'endTimestamp'       => $time,
+            'totalExecutionTime' => (float) bcsub((string) $time, (string) $this->startTimestamp, 4),
+            'memory'             => memory_get_usage(),
+            'memoryPeak'         => memory_get_peak_usage(),
+            'spanID'             => $this->controller->getSpanId() ?? throw new RuntimeException('Span ID not available!'),
         ];
 
         foreach ($this->spans as $span)
