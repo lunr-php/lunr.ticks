@@ -9,8 +9,12 @@
 
 namespace Lunr\Ticks;
 
+use Lunr\Ticks\EventLogging\EventInterface;
+
 /**
  * Interface for accessing tracing info.
+ *
+ * @phpstan-import-type Tags from EventInterface
  */
 interface TracingInfoInterface
 {
@@ -35,6 +39,13 @@ interface TracingInfoInterface
      * @return string|null Parent span ID
      */
     public function getParentSpanId(): ?string;
+
+    /**
+     * Get tags that are specific to the current span.
+     *
+     * @return Tags Indexed metadata about the current span
+     */
+    public function getSpanSpecificTags(): array;
 
 }
 
