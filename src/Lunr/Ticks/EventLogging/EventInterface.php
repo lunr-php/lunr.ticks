@@ -180,9 +180,11 @@ interface EventInterface
     /**
      * Record the event.
      *
+     * @param Precision $precision Timestamp precision (defaults to Nanoseconds)
+     *
      * @return void
      */
-    public function record(): void;
+    public function record(Precision $precision = Precision::NanoSeconds): void;
 
 }
 
