@@ -65,6 +65,22 @@ class ProfilerBaseTest extends ProfilerTestCase
         $this->assertPropertySame('startTimestamp', $this->startTimestamp);
     }
 
+    /**
+     * Test that record is not called at __descrtruct when shouldRecord is FALSE.
+     */
+    public function testDestructWhenShouldRecordIsFALSE(): void
+    {
+        $this->setReflectionPropertyValue('shouldRecord', FALSE);
+
+        $this->event->shouldReceive('recordTimestamp')
+                    ->never();
+
+        $this->event->shouldReceive('record')
+                    ->never();
+
+        $this->class->__destruct();
+    }
+
 }
 
 ?>
