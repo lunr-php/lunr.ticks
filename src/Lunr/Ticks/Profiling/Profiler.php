@@ -178,18 +178,18 @@ class Profiler
      */
     protected function finalizePreviousSpan(float $time): void
     {
-        $last_report = count($this->spans) - 1;
+        $lastReport = count($this->spans) - 1;
 
-        if ($last_report < 0)
+        if ($lastReport < 0)
         {
             return;
         }
 
         $this->controller->stopChildSpan();
 
-        if (isset($this->spans[$last_report]))
+        if (isset($this->spans[$lastReport]))
         {
-            $this->spans[$last_report]['executionTime'] = (float) bcsub((string) $time, (string) $this->spans[$last_report]['startTimestamp'], 4);
+            $this->spans[$lastReport]['executionTime'] = (float) bcsub((string) $time, (string) $this->spans[$lastReport]['startTimestamp'], 4);
         }
     }
 

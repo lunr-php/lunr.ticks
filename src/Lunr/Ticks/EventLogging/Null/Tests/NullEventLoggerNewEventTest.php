@@ -31,10 +31,10 @@ class NullEventLoggerNewEventTest extends NullEventLoggerTestCase
 
         $this->assertInstanceOf(NullEvent::class, $event);
 
-        $event_reflection = new ReflectionClass(NullEvent::class);
+        $eventReflection = new ReflectionClass(NullEvent::class);
 
-        $eventLogger = $event_reflection->getProperty('eventLogger')
-                                        ->getValue($event);
+        $eventLogger = $eventReflection->getProperty('eventLogger')
+                                       ->getValue($event);
 
         $this->assertSame($this->class, $eventLogger);
     }
