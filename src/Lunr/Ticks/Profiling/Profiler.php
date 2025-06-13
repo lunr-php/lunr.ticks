@@ -187,10 +187,12 @@ class Profiler
 
         $this->controller->stopChildSpan();
 
-        if (isset($this->spans[$lastReport]))
+        if (!isset($this->spans[$lastReport]))
         {
-            $this->spans[$lastReport]['executionTime'] = (float) bcsub((string) $time, (string) $this->spans[$lastReport]['startTimestamp'], 4);
+            return;
         }
+
+        $this->spans[$lastReport]['executionTime'] = (float) bcsub((string) $time, (string) $this->spans[$lastReport]['startTimestamp'], 4);
     }
 
     /**
