@@ -26,8 +26,6 @@ class ProfilerSpanTest extends ProfilerTestCase
      */
     public function testFinalizePreviousSpanWithNoPreviousSpan(): void
     {
-        $spanID = '8d1a5341-16f9-4608-bf51-db198e52575c';
-
         $method = $this->getReflectionMethod('finalizePreviousSpan');
 
         $method->invokeArgs($this->class, [ 1734352683.4537 ]);
