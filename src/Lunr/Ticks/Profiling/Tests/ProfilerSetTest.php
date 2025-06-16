@@ -73,6 +73,18 @@ class ProfilerSetTest extends ProfilerTestCase
         $this->class->addTags([ 'foo' => 'bar' ]);
     }
 
+    /**
+     * Test that shouldBeRecorded() set the shouldRecord property.
+     *
+     * @covers Lunr\Ticks\Profiling\Profiler::shouldBeRecorded
+     */
+    public function testShouldBeRecorded(): void
+    {
+        $this->class->shouldBeRecorded(FALSE);
+
+        $this->assertPropertySame('shouldRecord', FALSE);
+    }
+
 }
 
 ?>
