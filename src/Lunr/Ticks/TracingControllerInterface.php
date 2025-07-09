@@ -29,6 +29,22 @@ interface TracingControllerInterface
      */
     public function stopChildSpan(): void;
 
+    /**
+     * Get a new ID that can be used as a span ID.
+     *
+     * @return string New span ID
+     */
+    public function getNewSpanId(): string;
+
+    /**
+     * Check whether a given string is valid for use as a span ID.
+     *
+     * @param string $id String to verify
+     *
+     * @return bool Whether the string is valid for use as a span ID or not
+     */
+    public function isValidSpanId(string $id): bool;
+
 }
 
 ?>
