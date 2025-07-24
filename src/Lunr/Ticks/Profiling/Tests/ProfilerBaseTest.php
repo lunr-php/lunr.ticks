@@ -9,6 +9,8 @@
 
 namespace Lunr\Ticks\Profiling\Tests;
 
+use Lunr\Ticks\Profiling\Profiler;
+
 /**
  * This class contains tests for the Profiler class.
  *
@@ -63,6 +65,50 @@ class ProfilerBaseTest extends ProfilerTestCase
     public function testStartTimestampIsSet(): void
     {
         $this->assertPropertySame('startTimestamp', $this->startTimestamp);
+    }
+
+    /**
+     * Test that the profiler accepts a custom startTimestamp value.
+     */
+    public function testProfilerAcceptsCustomStartTimestamp(): void
+    {
+        $this->controller->shouldReceive('stopChildSpan')
+                         ->zeroOrMoreTimes();
+
+        $this->controller->shouldReceive('getTraceId')
+                         ->once()
+                         ->andReturn('e0af2cd4-6a1c-4bd6-8fca-d3684e699784');
+
+        $this->controller->shouldReceive('getSpanId')
+                         ->once()
+                         ->andReturn('3f946299-16b5-44ee-8290-3f0fdbbbab1d');
+
+        $this->event->shouldReceive('setTraceId')
+                    ->once()
+                    ->with('e0af2cd4-6a1c-4bd6-8fca-d3684e699784');
+
+        $this->event->shouldReceive('addFields')
+                    ->once();
+
+        $this->event->shouldReceive('addTags')
+                    ->once();
+
+        $this->event->shouldReceive('setUuidValue')
+                    ->zeroOrMoreTimes();
+
+        $this->event->shouldReceive('recordTimestamp')
+                    ->once();
+
+        $this->event->shouldReceive('record')
+                    ->once();
+
+        $timestamp = 12345678.9;
+
+        $class = new Profiler($this->event, $this->controller, $timestamp);
+
+        $value = $this->reflection->getProperty('startTimestamp')->getValue($class);
+
+        $this->assertSame($value, $timestamp);
     }
 
 }

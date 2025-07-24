@@ -62,12 +62,13 @@ class Profiler
     /**
      * Constructor.
      *
-     * @param EventInterface                                  $event      An observability event.
-     * @param TracingControllerInterface&TracingInfoInterface $controller A tracing controller.
+     * @param EventInterface                                  $event          An observability event.
+     * @param TracingControllerInterface&TracingInfoInterface $controller     A tracing controller.
+     * @param float|null                                      $startTimestamp Custom start timestamp (optional)
      */
-    public function __construct(EventInterface $event, TracingControllerInterface&TracingInfoInterface $controller)
+    public function __construct(EventInterface $event, TracingControllerInterface&TracingInfoInterface $controller, ?float $startTimestamp = NULL)
     {
-        $this->startTimestamp = microtime(TRUE);
+        $this->startTimestamp = $startTimestamp ?? microtime(as_float: TRUE);
 
         $this->fields = [];
         $this->tags   = [];
@@ -151,7 +152,7 @@ class Profiler
      */
     public function startNewSpan(string $name): void
     {
-        $start = microtime(TRUE);
+        $start = microtime(as_float: TRUE);
 
         $this->finalizePreviousSpan($start);
 
@@ -202,7 +203,7 @@ class Profiler
      */
     protected function record(): void
     {
-        $time = microtime(TRUE);
+        $time = microtime(as_float: TRUE);
 
         $this->finalizePreviousSpan($time);
 
