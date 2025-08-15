@@ -117,6 +117,28 @@ class Profiler
     }
 
     /**
+     * Get single piece of unstructured metadata.
+     *
+     * @param string $key Key name
+     *
+     * @return bool|float|int|string|null
+     */
+    public function getField(string $key): bool|float|int|string|null
+    {
+        return $this->event->getFields()[$key] ?? NULL;
+    }
+
+    /**
+     * Get unstructured metadata.
+     *
+     * @return Fields
+     */
+    public function getFields(): array
+    {
+        return $this->event->getFields();
+    }
+
+    /**
      * Add single piece of indexed metadata.
      *
      * @param string      $key   Key name
@@ -141,6 +163,28 @@ class Profiler
     public function addTags(array $tags): void
     {
         $this->event->addTags($tags);
+    }
+
+    /**
+     * Get single piece of indexed metadata.
+     *
+     * @param string $key Key name
+     *
+     * @return bool|string|null
+     */
+    public function getTag(string $key): bool|string|null
+    {
+        return $this->event->getTags()[$key] ?? NULL;
+    }
+
+    /**
+     * Get indexed metadata.
+     *
+     * @return Tags
+     */
+    public function getTags(): array
+    {
+        return $this->event->getTags();
     }
 
     /**
