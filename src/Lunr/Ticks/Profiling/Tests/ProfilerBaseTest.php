@@ -83,9 +83,17 @@ class ProfilerBaseTest extends ProfilerTestCase
                          ->once()
                          ->andReturn('3f946299-16b5-44ee-8290-3f0fdbbbab1d');
 
+        $this->controller->shouldReceive('getSpanSpecificTags')
+                         ->once()
+                         ->andReturn([ 'controller' => 'foo' ]);
+
         $this->event->shouldReceive('setTraceId')
                     ->once()
                     ->with('e0af2cd4-6a1c-4bd6-8fca-d3684e699784');
+
+        $this->event->shouldReceive('setSpanId')
+                    ->once()
+                    ->with('3f946299-16b5-44ee-8290-3f0fdbbbab1d');
 
         $this->event->shouldReceive('addFields')
                     ->once();

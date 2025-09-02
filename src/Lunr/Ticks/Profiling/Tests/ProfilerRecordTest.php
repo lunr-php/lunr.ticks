@@ -26,9 +26,17 @@ class ProfilerRecordTest extends ProfilerTestCase
      */
     public function testRecordThrowsExceptionIfSpanIdNotAvailable(): void
     {
+        $this->controller->shouldReceive('getTraceId')
+                         ->once()
+                         ->andReturn('e0af2cd4-6a1c-4bd6-8fca-d3684e699784');
+
         $this->controller->shouldReceive('getSpanId')
                          ->once()
                          ->andReturn(NULL);
+
+        $this->event->shouldReceive('setTraceId')
+                    ->once()
+                    ->with('e0af2cd4-6a1c-4bd6-8fca-d3684e699784');
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Span ID not available!');
@@ -48,10 +56,6 @@ class ProfilerRecordTest extends ProfilerTestCase
         $this->controller->shouldReceive('getTraceId')
                          ->once()
                          ->andReturn(NULL);
-
-        $this->controller->shouldReceive('getSpanId')
-                         ->once()
-                         ->andReturn('3f946299-16b5-44ee-8290-3f0fdbbbab1d');
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Trace ID not available!');
@@ -83,9 +87,17 @@ class ProfilerRecordTest extends ProfilerTestCase
                          ->once()
                          ->andReturn('3f946299-16b5-44ee-8290-3f0fdbbbab1d');
 
+        $this->controller->shouldReceive('getSpanSpecificTags')
+                         ->once()
+                         ->andReturn([ 'controller' => 'foo' ]);
+
         $this->event->shouldReceive('setTraceId')
                     ->once()
                     ->with('e0af2cd4-6a1c-4bd6-8fca-d3684e699784');
+
+        $this->event->shouldReceive('setSpanId')
+                    ->once()
+                    ->with('3f946299-16b5-44ee-8290-3f0fdbbbab1d');
 
         $fields = [
             'startTimestamp'     => 1734352683.3516,
@@ -93,7 +105,6 @@ class ProfilerRecordTest extends ProfilerTestCase
             'totalExecutionTime' => 1.3010,
             'memory'             => 526160,
             'memoryPeak'         => 561488,
-            'spanID'             => '3f946299-16b5-44ee-8290-3f0fdbbbab1d',
         ];
 
         $this->event->shouldReceive('addFields')
@@ -102,7 +113,7 @@ class ProfilerRecordTest extends ProfilerTestCase
 
         $this->event->shouldReceive('addTags')
                     ->once()
-                    ->with([]);
+                    ->with([ 'controller' => 'foo' ]);
 
         $this->event->shouldReceive('recordTimestamp')
                     ->once();
@@ -157,12 +168,20 @@ class ProfilerRecordTest extends ProfilerTestCase
                          ->once()
                          ->andReturn($spanID);
 
+        $this->controller->shouldReceive('getSpanSpecificTags')
+                         ->once()
+                         ->andReturn([ 'controller' => 'foo' ]);
+
         $this->controller->shouldReceive('stopChildSpan')
                          ->once();
 
         $this->event->shouldReceive('setTraceId')
                     ->once()
                     ->with('e0af2cd4-6a1c-4bd6-8fca-d3684e699784');
+
+        $this->event->shouldReceive('setSpanId')
+                    ->once()
+                    ->with($spanID);
 
         $fields = [
             'baz'                       => 2.0,
@@ -171,7 +190,6 @@ class ProfilerRecordTest extends ProfilerTestCase
             'totalExecutionTime'        => 1.3010,
             'memory'                    => 526160,
             'memoryPeak'                => 561488,
-            'spanID'                    => $spanID,
             'startTimestampUnitTestRun' => 1734352683.3516,
             'memoryUnitTestRun'         => 526161,
             'memoryPeakUnitTestRun'     => 561489,
@@ -183,7 +201,8 @@ class ProfilerRecordTest extends ProfilerTestCase
                     ->with($fields);
 
         $tags = [
-            'foo' => 'bar',
+            'foo'        => 'bar',
+            'controller' => 'foo',
         ];
 
         $this->event->shouldReceive('addTags')
@@ -235,12 +254,20 @@ class ProfilerRecordTest extends ProfilerTestCase
                          ->once()
                          ->andReturn($spanID);
 
+        $this->controller->shouldReceive('getSpanSpecificTags')
+                         ->once()
+                         ->andReturn([ 'controller' => 'foo' ]);
+
         $this->controller->shouldReceive('stopChildSpan')
                          ->once();
 
         $this->event->shouldReceive('setTraceId')
                     ->once()
                     ->with('e0af2cd4-6a1c-4bd6-8fca-d3684e699784');
+
+        $this->event->shouldReceive('setSpanId')
+                    ->once()
+                    ->with($spanID);
 
         $base = [
             [
@@ -272,7 +299,6 @@ class ProfilerRecordTest extends ProfilerTestCase
             'totalExecutionTime'               => 1.3010,
             'memory'                           => 526160,
             'memoryPeak'                       => 561488,
-            'spanID'                           => $spanID,
             'startTimestampUnitTestRun'        => 1734352683.3516,
             'memoryUnitTestRun'                => 526161,
             'memoryPeakUnitTestRun'            => 561489,
@@ -288,7 +314,8 @@ class ProfilerRecordTest extends ProfilerTestCase
                     ->with($fields);
 
         $tags = [
-            'foo' => 'bar',
+            'foo'        => 'bar',
+            'controller' => 'foo',
         ];
 
         $this->event->shouldReceive('addTags')

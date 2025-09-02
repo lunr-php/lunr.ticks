@@ -257,7 +257,6 @@ class Profiler
             'totalExecutionTime' => (float) bcsub((string) $time, (string) $this->startTimestamp, 4),
             'memory'             => memory_get_usage(),
             'memoryPeak'         => memory_get_peak_usage(),
-            'spanID'             => $this->controller->getSpanId() ?? throw new RuntimeException('Span ID not available!'),
         ];
 
         foreach ($this->spans as $span)
@@ -275,8 +274,9 @@ class Profiler
         }
 
         $this->event->setTraceId($this->controller->getTraceId() ?? throw new RuntimeException('Trace ID not available!'));
+        $this->event->setSpanId($this->controller->getSpanId() ?? throw new RuntimeException('Span ID not available!'));
         $this->event->addFields($fields);
-        $this->event->addTags($this->tags);
+        $this->event->addTags(array_merge($this->controller->getSpanSpecificTags(), $this->tags));
         $this->event->recordTimestamp();
 
         $this->event->record();
